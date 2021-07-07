@@ -23,9 +23,9 @@ namespace Streamish.Repositories
                       up.ImageUrl AS UserProfileImageUrl
                         
                  FROM Video v 
-                      JOIN UserProfile up ON v.UserProfileId = up.Id
-             ORDER BY DateCreated
-            ";
+                      LEFT JOIN UserProfile up ON v.UserProfileId = up.Id
+                      ORDER BY DateCreated
+                        ";
 
                     var reader = cmd.ExecuteReader();
 
@@ -139,9 +139,13 @@ namespace Streamish.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                          SELECT Title, Description, Url, DateCreated, UserProfileId
-                            FROM Video
-                           WHERE Id = @Id";
+                          SELECT v.Title, v.Description, v.Url, v.DateCreated as VideoDateCreated, v.UserProfileId as VideoUserProfileId,
+                            up.Name, up.Email, up.DateCreated AS UserProfileDateCreated,
+                      up.ImageUrl AS UserProfileImageUrl
+                        
+                       FROM Video v 
+                           JOIN UserProfile up ON v.UserProfileId = up.Id
+                           WHERE v.Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
@@ -155,9 +159,17 @@ namespace Streamish.Repositories
                             Id = id,
                             Title = DbUtils.GetString(reader, "Title"),
                             Description = DbUtils.GetString(reader, "Description"),
-                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
+                            DateCreated = DbUtils.GetDateTime(reader, "VideoDateCreated"),
                             Url = DbUtils.GetString(reader, "Url"),
-                            UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                            UserProfileId = DbUtils.GetInt(reader, "VideoUserProfileId"),
+                            UserProfile = new UserProfile()
+                            {
+                                Id = DbUtils.GetInt(reader, "VideoUserProfileId"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Email = DbUtils.GetString(reader, "Email"),
+                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                            }
                         };
                     }
 
