@@ -104,6 +104,53 @@ namespace Streamish.Repositories
             }
         }
 
+        public UserProfile GetUserProfileByIdWithVideos(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                          SELECT up.Id, v.Title, v.Description, v.Url, v.DateCreated as VideoDateCreated, v.Id as VideoId,
+                            up.Name, up.Email, up.DateCreated AS UserProfileDateCreated,
+                            up.ImageUrl AS UserProfileImageUrl 
+                     FROM UserProfile up 
+                       JOIN Video v ON v.UserProfileId = up.Id
+                    WHERE up.Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    var reader = cmd.ExecuteReader();
+
+                    UserProfile userProfile = null;
+                    if (reader.Read())
+                    {
+                        userProfile = new UserProfile()
+                        {
+                            Id = id,
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                            ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                            Video = new Video()
+                            {
+                                Id = DbUtils.GetInt(reader, "VideoId"),
+                                Title = DbUtils.GetString(reader, "Title"),
+                                Description = DbUtils.GetString(reader, "Description"),
+                                DateCreated = DbUtils.GetDateTime(reader, "VideoDateCreated"),
+                                Url = DbUtils.GetString(reader, "URL"),
+                            }
+                        };
+                    }
+
+                    reader.Close();
+
+                    return userProfile;
+                }
+            }
+        }
+
         public void Update(UserProfile userProfile)
         {
             using (var conn = Connection)
