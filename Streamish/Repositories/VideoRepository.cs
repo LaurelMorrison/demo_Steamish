@@ -312,7 +312,7 @@ namespace Streamish.Repositories
             }
         }
 
-        public List<Video> Search(string criterion, bool sortDescending)
+        public List<Video> Search(string query, bool sortDescending)
         {
             using (var conn = Connection)
             {
@@ -326,7 +326,7 @@ namespace Streamish.Repositories
                         
                 FROM Video v 
                      JOIN UserProfile up ON v.UserProfileId = up.Id
-               WHERE v.Title LIKE @Criterion OR v.Description LIKE @Criterion";
+               WHERE v.Title LIKE @Query";
 
                     if (sortDescending)
                     {
@@ -338,7 +338,7 @@ namespace Streamish.Repositories
                     }
 
                     cmd.CommandText = sql;
-                    DbUtils.AddParameter(cmd, "@Criterion", $"%{criterion}%");
+                    DbUtils.AddParameter(cmd, "@Query", $"%{query}%");
                     var reader = cmd.ExecuteReader();
 
                     var videos = new List<Video>();

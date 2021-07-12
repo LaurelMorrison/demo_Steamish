@@ -20,3 +20,9 @@ export const addVideo = (video) => {
 export const getVideo = (id) => {
     return fetch(`${baseUrl}/${id}`).then((res) => res.json());
 };
+
+//searching the database to parse through data
+export const searchVideo = (searchTerms) => {
+    return fetch(`${baseUrl}/search?=${searchTerms}`)
+        .then((res) => res.json())
+};

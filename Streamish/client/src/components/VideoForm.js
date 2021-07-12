@@ -1,5 +1,6 @@
-import React, { useState, useHistory } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { addVideo } from "../modules/videoManager";
 
 const VideoForm = ({ getVideos }) => {
