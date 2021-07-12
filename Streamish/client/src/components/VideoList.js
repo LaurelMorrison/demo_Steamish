@@ -6,7 +6,9 @@ const VideoList = () => {
   const [videos, setVideos] = useState([]);
 
   const getVideos = () => {
-    getAllVideos().then(videos => setVideos(videos));
+    getAllVideos().then((videos) => {
+     debugger   
+        setVideos(videos)});
   };
 
   useEffect(() => {

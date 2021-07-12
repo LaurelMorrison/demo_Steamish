@@ -18,6 +18,8 @@ namespace Streamish.Models
 
         public DateTime DateCreated { get; set; }
         public Video Video { get; set; }
+        public List<Video> Videos { get; internal set; }
+
 
     }
 }
