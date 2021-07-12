@@ -36,13 +36,13 @@ const VideoForm = ({ getVideos }) => {
     <Form>
       <FormGroup>
         <Label for="title">Title</Label>
-        <Input type="text" name="title" id="title" placeholder="video title"
+        <Input type="text" name="title" id="title" placeholder="video title" required
           value={video.title}
           onChange={handleInputChange} />
       </FormGroup>
       <FormGroup>
         <Label for="url">URL</Label>
-        <Input type="text" name="url" id="url" placeholder="video link" 
+        <Input type="text" name="url" id="url" placeholder="video link" required 
           value={video.url}
           onChange={handleInputChange} />
       </FormGroup>

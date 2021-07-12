@@ -3,24 +3,30 @@ import Video from './Video';
 import { getAllVideos, searchVideo } from "../modules/videoManager";
 
 const VideoList = () => {
+    // Set state for the videos
   const [videos, setVideos] = useState([]);
-  const [search, setSearch] = useState([]);
 
-
+    // Pulling a list of all videos, which we can map through in the return
   const getVideos = () => {
     getAllVideos().then((videos) => {
         setVideos(videos)});
   };
 
+  // Adding a search event to handle input changed in return form below
   const handleSearch = (event) => {
+      // prevent default to get valid information
     event.preventDefault()
+    // console log the input
     console.log(event)
 
+    // setting entered details to then compare to the video list
     let searchInput = event.target.value
-    let searchVideos = {}
+    let filterVideos = {}
 
-    searchVideos[event.target.id] = searchInput
-    searchVideo(searchInput)
+    // search database and filter potential responses
+    // show a list of matches if the filteration match is true
+    filterVideos[event.target.id] = searchInput
+    searchVideo(searchInput, true)
         .then(videos => setVideos(videos))
     }
 
@@ -31,7 +37,7 @@ const VideoList = () => {
   return (
     <div className="container">
         <form>
-           <input class="search" type="text" required placeholder="Search by title:"
+           <input className="search" type="text" required placeholder="Search by title:"
             onChange={handleSearch} />
         </form>
       <div className="row justify-content-center">
