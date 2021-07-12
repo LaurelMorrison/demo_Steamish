@@ -7,7 +7,6 @@ const VideoList = () => {
 
   const getVideos = () => {
     getAllVideos().then((videos) => {
-     debugger   
         setVideos(videos)});
   };
 

@@ -1,33 +1,32 @@
 import React, { useEffect, useState } from "react";
-import React, {useEffect, useState} from "react";
 import { ListGroup, ListGroupItem } from "reactstrap";
-import Video from './Video';
-import { getAllVideos } from "../modules/videoManager";
+import { useParams } from "react-router-dom";
+import Video from "./Video";
+import { getVideo } from "../modules/videoManager";
 
 const VideoDetails = () => {
-  const [video, setVideo] = useState([]);
-
-  const getVideos = () => {
-    getAllVideos().then((video) => setVideo(video));
-  };
+  const [video, setVideo] = useState();
+  const { id } = useParams();
 
   useEffect(() => {
-    getVideos();
+    getVideo(id).then(setVideo);
   }, []);
 
-//   if (!videos) {
-//     return null;
-//     }
+  if (!video) {
+    return null;
+  }
 
   return (
     <div className="container">
-        <h1>BlockBuster</h1>
       <div className="row justify-content-center">
-      <Video video={video} />
-      <ListGroup>
-          {video.comments?.map((c) => (
-           <ListGroupItem>{c.message}</ListGroupItem> ))}
-         </ListGroup>
+        <div className="col-sm-12 col-lg-6">
+          <Video video={video} />
+          <ListGroup>
+            {video.comments.map((c) => (
+              <ListGroupItem>{c.message}</ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
       </div>
     </div>
   );
